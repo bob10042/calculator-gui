@@ -1,0 +1,33 @@
+How to Run C Programs in Your Environment:
+
+1. First, initialize your C development environment:
+   - Open PowerShell
+   - Type 'cdev' and press Enter
+   This ensures gcc is in your PATH.
+
+2. To create and run a C program:
+
+   a. Create your C file (example.c):
+      - Use VSCode or any text editor
+      - Save with .c extension
+
+   b. Compile your program:
+      gcc yourfile.c -o yourfile.exe
+      
+   c. Run your program:
+      .\yourfile.exe
+
+Example:
+If you have a file named program.c:
+gcc program.c -o program.exe
+.\program.exe
+
+Common Compiler Flags:
+-o : Specify output filename
+-Wall : Enable all warnings
+-g : Add debugging information
+
+Example with warnings enabled:
+gcc -Wall yourfile.c -o yourfile.exe
+
+Note: Always run 'cdev' in a new PowerShell session to ensure the C environment is properly initialized.

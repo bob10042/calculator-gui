@@ -1,0 +1,47 @@
+C GUI Development Guide (Windows)
+
+1. Win32 API (Built-in Windows GUI)
+   - Pros: No additional libraries needed, native Windows look
+   - Cons: Windows-only, more verbose code
+   - Compilation: gcc yourfile.c -o yourfile.exe -mwindows
+
+   Key Components:
+   - WNDCLASSW: Window class structure
+   - CreateWindowW: Creates windows and controls
+   - WindowProcedure: Handles window messages
+   - Message Loop: Processes window events
+
+2. Alternative GUI Libraries (Need to be installed):
+
+   a. GTK (Cross-platform):
+      - Installation: Download MSYS2 from https://www.msys2.org/
+      - In MSYS2: pacman -S mingw-w64-x86_64-gtk3
+      - Compilation: gcc `pkg-config --cflags gtk+-3.0` yourfile.c -o yourfile.exe `pkg-config --libs gtk+-3.0`
+
+   b. Qt (Cross-platform):
+      - More feature-rich but requires separate installation
+      - Download from https://www.qt.io/download
+
+Common GUI Elements You Can Add:
+1. Buttons: CreateWindowW(L"Button", ...)
+2. Text Fields: CreateWindowW(L"EDIT", ...)
+3. Labels: CreateWindowW(L"STATIC", ...)
+4. Checkboxes: CreateWindowW(L"BUTTON", ..., BS_CHECKBOX)
+5. Radio Buttons: CreateWindowW(L"BUTTON", ..., BS_RADIOBUTTON)
+6. List Boxes: CreateWindowW(L"LISTBOX", ...)
+7. Combo Boxes: CreateWindowW(L"COMBOBOX", ...)
+
+Example Structure for a GUI Application:
+1. Define window class
+2. Register window class
+3. Create main window
+4. Add controls (buttons, textboxes, etc.)
+5. Implement message handling
+6. Start message loop
+
+Tips:
+- Use #include <windows.h> for Win32 API
+- Use -mwindows flag when compiling to hide console window
+- Handle WM_DESTROY to properly close application
+- Use WM_COMMAND to handle button clicks and other controls
+- Add error checking for window creation
