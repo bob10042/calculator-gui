@@ -4,6 +4,117 @@ A Windows GUI scientific calculator built in C++ using the native Win32 API. Fea
 
 ---
 
+## Requirements to Run
+
+### To run the pre-built executable (`calculator_v8.exe`)
+
+- **Operating System**: Windows 10 or Windows 11 (64-bit)
+- **No installation required** — the `.exe` is fully self-contained
+- **No external DLLs or libraries needed** — uses only the Windows Win32 API built into every copy of Windows
+- Simply double-click `calculator_v8.exe` from File Explorer
+
+> **Note**: Must be launched from the Windows desktop environment (not via WSL or a headless terminal) for the GUI and graphing to display correctly.
+
+### To recompile from source (`calculator.cpp`)
+
+| Requirement | Details |
+|-------------|---------|
+| Compiler | MinGW-w64 g++ (C++17 or later) |
+| Download | https://www.mingw-w64.org/ or via MSYS2 |
+| Standard Library | C++17 STL (`<cmath>`, `<map>`, `<sstream>`, `<vector>`, `<functional>`) |
+| Windows SDK | Included with MinGW — provides `<windows.h>` |
+| Build command | `g++ -std=c++17 -mwindows -municode calculator.cpp -o calculator_v8.exe` |
+
+No CMake, no Visual Studio, no extra packages — one file, one command.
+
+---
+
+## What It Can Do — Full Capabilities
+
+### Standard Calculator
+- All basic arithmetic: `+`, `−`, `×`, `÷`, modulo `%`
+- Exponentiation: `^` (e.g. `2^10` = 1024)
+- Factorial: `!` (up to 170!)
+- Negative numbers, decimal input, parentheses (auto-closed on `=`)
+- Implicit multiplication: `2pi`, `3(4+1)`, `5sin(30)` all work
+- Memory: store, recall, clear, add to, subtract from
+- `Ans` — reuse last result in the next expression
+- `pi` and `e` as built-in constants
+- 15-digit precision output
+
+### Scientific Functions
+- **Trigonometry**: sin, cos, tan, asin, acos, atan — fully respects RAD/DEG mode
+- **Logarithms**: natural log (ln), base-10 log (log), 10^x
+- **Roots & powers**: sqrt, x², pow(x,y)
+- **Utilities**: abs (absolute value), min, max
+
+### Electrical Engineering — DC Power & Ohm's Law
+Calculate any variable in the power triangle (P, V, I, R) given any two known values:
+- **P=VI** — Power from voltage and current
+- **P=I²R** — Power from current and resistance
+- **P=V²/R** — Power from voltage and resistance
+- **V=IR** — Voltage from current and resistance
+- **I=V/R** — Current from voltage and resistance
+- **R=V/I** — Resistance from voltage and current
+- **V=P/I**, **I=P/V** — Derived from power
+- **V=√(PR)**, **I=√(P/R)** — Square-root derived forms
+- **Z=√(R²+X²)** — Impedance magnitude from resistance and reactance
+- **PF=cos(θ)** — Power factor from phase angle
+
+### Electrical Engineering — AC Power
+- **Real power (W)**: Preal(V, I, θ) = V × I × cos(θ)
+- **Reactive power (VAR)**: Preact(V, I, θ) = V × I × sin(θ)
+- **Apparent power (VA)**: Papp(V, I) = V × I
+- All angle inputs respect the current RAD/DEG mode setting
+
+### Electrical Engineering — Reactance & Resonance
+- **Capacitive reactance**: Xc(f, C) = 1 / (2πfC) — enter frequency in Hz, capacitance in Farads
+- **Inductive reactance**: Xl(f, L) = 2πfL — enter frequency in Hz, inductance in Henries
+- **Resonant frequency**: fres(L, C) = 1 / (2π√(LC)) — LC tank circuit resonance in Hz
+
+### Electrical Engineering — Decibels & Signal
+- **Voltage gain dB**: dbv(V1, V2) = 20 × log₁₀(V1/V2)
+- **Power gain dB**: dbp(P1, P2) = 10 × log₁₀(P1/P2)
+- **Voltage divider**: vdiv(Vin, R1, R2) = Vin × R2 / (R1 + R2)
+
+### Calculus — Summations
+- **Σ(n)**: Sum of integers 1 to n — formula: n(n+1)/2
+- **Σ(n²)**: Sum of squares 1² to n² — formula: n(n+1)(2n+1)/6
+- **Σ(n³)**: Sum of cubes 1³ to n³ — formula: (n(n+1)/2)²
+- **Geometric series**: geom(a, r, n) = a(1−rⁿ⁺¹)/(1−r)
+
+### Calculus — Definite Integrals (exact analytic results)
+- **∫xⁿ dx** from a to b: intpow(a, b, k) — handles k=−1 (gives ln result)
+- **∫eˣ dx** from a to b: intexp(a, b)
+- **∫sin x dx** from a to b: intsin(a, b)
+- **∫cos x dx** from a to b: intcos(a, b)
+- **∫(1/x) dx** from a to b: intlog(a, b)
+
+### Calculus — Numerical Derivatives
+Uses the central difference method: (f(x+h) − f(x−h)) / (2h) for high accuracy:
+- **d/dx(xⁿ)** at x: derivpow(x, n, h)
+- **d/dx(eˣ)** at x: derivexp(x, h)
+- **d/dx(sin x)** at x: derivsin(x, h)
+- **d/dx(cos x)** at x: derivcos(x, h)
+- **d/dx(ln x)** at x: derivln(x, h)
+- Recommended step size h = 0.000001 (use the `h=1e-6` button)
+
+### Limits
+- **limpow(x0, n, dir)**: evaluates lim(x→x0) of xⁿ from the right (dir=+1) or left (dir=−1)
+
+### Function Graphing
+- Plot any expression involving `x` (e.g. `sin(x)`, `x^2`, `e^(-abs(x))*sin(x)`)
+- Auto-scales Y axis to fit the function with 10% padding
+- Zoom in / zoom out controls (20%/25% per click)
+- 10×10 grid with visible X and Y axes
+- 18 one-click preset graphs across three categories:
+  - **Basic**: sin, cos, tan, x², x³, √x
+  - **More**: eˣ, ln(x), 1/x, |x|, sin(2x), cos(2x)
+  - **Wave**: damped sine, sin+cos, sin²x, cos²x, sinc (sin(x)/x), x·sin(x)
+- Current expression label displayed on graph panel
+
+---
+
 ## Building
 
 Requires MinGW-w64 (g++ with C++17 support):
